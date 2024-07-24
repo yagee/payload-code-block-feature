@@ -4,11 +4,7 @@ import {
     SlashMenuOption,
     type FeatureProvider,
 } from "@payloadcms/richtext-lexical";
-import {
-    $getSelection,
-    $isRangeSelection,
-    DEPRECATED_$isGridSelection,
-} from "lexical";
+import { $getSelection, $isRangeSelection } from "lexical";
 
 import type { CodeBlockFeatureConfig } from "./types";
 
@@ -36,12 +32,7 @@ export const CodeBlockFeature = (
                                         editor.update(() => {
                                             let selection = $getSelection();
 
-                                            if (
-                                                $isRangeSelection(selection) ||
-                                                DEPRECATED_$isGridSelection(
-                                                    selection
-                                                )
-                                            ) {
+                                            if ($isRangeSelection(selection)) {
                                                 if (selection.isCollapsed()) {
                                                     $setBlocksType(
                                                         selection,
