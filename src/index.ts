@@ -5,9 +5,9 @@ import {
     type FeatureProvider,
 } from "@payloadcms/richtext-lexical";
 import {
-    DEPRECATED_$isGridSelection,
     $getSelection,
     $isRangeSelection,
+    DEPRECATED_$isGridSelection,
 } from "lexical";
 
 import type { CodeBlockFeatureConfig } from "./types";
@@ -17,7 +17,7 @@ export const CodeBlockFeature = (
 ): FeatureProvider => {
     const { languages } = config;
     return {
-        feature: () => {
+        feature: (): any => {
             return {
                 slashMenu: {
                     options: [
@@ -75,10 +75,38 @@ export const CodeBlockFeature = (
                 },
                 nodes: [
                     {
+                        converters: {
+                            html: async ({ node }) => {
+                                const codeText = node.children
+                                    .map((child) => {
+                                        if (child.type === "linebreak") {
+                                            return "\n";
+                                        }
+                                        return child.text;
+                                    })
+                                    .join("");
+
+                                return `<code lang="${node.language}">${codeText}</code>`;
+                            }, // <= This is where you define your HTML Converter
+                        },
                         node: CodeNode,
                         type: CodeNode.getType(),
                     },
                     {
+                        converters: {
+                            html: async ({ node }) => {
+                                const codeText = node.children
+                                    .map((child) => {
+                                        if (child.type === "linebreak") {
+                                            return "\n";
+                                        }
+                                        return child.text;
+                                    })
+                                    .join("");
+
+                                return `<code lang="${node.language}">${codeText}</code>`;
+                            }, // <= This is where you define your HTML Converter
+                        },
                         node: CodeHighlightNode,
                         type: CodeHighlightNode.getType(),
                     },
